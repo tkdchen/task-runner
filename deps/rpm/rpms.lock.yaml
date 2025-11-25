@@ -11,7 +11,13 @@ arches:
     name: bash
     evr: 5.2.26-6.el10
     sourcerpm: bash-5.2.26-6.el10.src.rpm
-  source: []
+  source:
+  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi10/10/aarch64/baseos/source/SRPMS/Packages/b/bash-5.2.26-6.el10.src.rpm
+    repoid: ubi-10-baseos-source-rpms
+    size: 11219180
+    checksum: sha256:247764e4d0f04040de5289564ae606e294ff0a97e09c837fdc8658c42776c0a8
+    name: bash
+    evr: 5.2.26-6.el10
   module_metadata: []
 - arch: x86_64
   packages:
@@ -22,5 +28,11 @@ arches:
     name: bash
     evr: 5.2.26-6.el10
     sourcerpm: bash-5.2.26-6.el10.src.rpm
-  source: []
+  source:
+  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi10/10/x86_64/baseos/source/SRPMS/Packages/b/bash-5.2.26-6.el10.src.rpm
+    repoid: ubi-10-baseos-source-rpms
+    size: 11219180
+    checksum: sha256:247764e4d0f04040de5289564ae606e294ff0a97e09c837fdc8658c42776c0a8
+    name: bash
+    evr: 5.2.26-6.el10
   module_metadata: []
