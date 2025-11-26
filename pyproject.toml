@@ -32,3 +32,8 @@ rpm-lockfile-prototype = { url = "https://github.com/konflux-ci/rpm-lockfile-pro
 
 [tool.setuptools]
 packages = ["devtool"]
+
+
+[tool.pytest.ini_options]
+addopts = ["-vv"]
+log_level = "debug"
