@@ -73,16 +73,17 @@ def _print_markdown_table(packages: list[Package], outfile: IO[str]) -> None:
             *("`go install`" if p.installed_with == "go" else "RPM" for p in packages),
         ]
     )
-    column_widths = [max(map(len, column)) for column in columns]
+    # Hardcoded to generate smaller diffs. Increase if any package name is longer than this.
+    column_width = 30
 
-    for column, width in zip(columns, column_widths):
-        column.insert(1, "-" * width)
+    for column in columns:
+        column.insert(1, "-" * column_width)
 
     transposed: list[tuple[str, ...]] = list(zip(*columns))
     for row in transposed:
-        for value, width in zip(row, column_widths):
+        for value in row:
             outfile.write("| ")
-            outfile.write(value.ljust(width))
+            outfile.write(value.ljust(column_width))
             outfile.write(" ")
         outfile.write("|\n")
 
