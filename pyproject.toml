@@ -13,6 +13,9 @@ devtool = "devtool.__main__:main"
 
 
 [dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+]
 rpm-lock = [
     "rpm-lockfile-prototype",
 ]

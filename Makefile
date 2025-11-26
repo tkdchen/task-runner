@@ -3,7 +3,7 @@ venv: .venv
 
 .PHONY: .venv
 .venv:
-	uv sync
+	uv sync --group dev
 
 .PHONY: rpms.lock.yaml
 rpms.lock.yaml:
