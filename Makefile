@@ -4,14 +4,14 @@ venv:
 	#   => need --system-site-packages
 	if command -v uv; then \
 		uv venv --system-site-packages --clear; \
-		uv pip install -r requirements-dev.txt; \
+		uv pip install -r requirements-dev.txt -e .; \
 	else \
 		if command -v virtualenv; then \
 			virtualenv --system-site-packages --clear .venv; \
 		else \
 			python3 -m venv --system-site-packages --clear .venv; \
 		fi; \
-		.venv/bin/pip install -r requirements-dev.txt; \
+		.venv/bin/pip install -r requirements-dev.txt -e .; \
 	fi
 
 .PHONY: rpms.lock.yaml

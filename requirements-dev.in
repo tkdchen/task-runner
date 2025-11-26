@@ -1,1 +1,2 @@
+-e .
 rpm-lockfile-prototype @ https://github.com/konflux-ci/rpm-lockfile-prototype/archive/refs/tags/v0.18.0.tar.gz
