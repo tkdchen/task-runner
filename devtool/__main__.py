@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 from typing import IO
 
-from devtool.software_list import Package, list_go_packages, list_rpms
+from devtool.software_list import Package, list_packages
 
 
 def main():
@@ -38,9 +38,8 @@ def list_software(format: str, output_file: Path | None) -> None:
     )
     project_root = Path(proc.stdout.strip())
 
-    go_packages = list_go_packages(project_root)
-    rpms = list_rpms(project_root)
-    packages = sorted(go_packages + rpms, key=lambda p: p.name)
+    packages = list_packages(project_root)
+    packages.sort(key=lambda p: p.name)
 
     if output_file:
         with output_file.open("w") as outfile:

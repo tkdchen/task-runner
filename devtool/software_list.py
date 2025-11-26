@@ -20,6 +20,10 @@ class Package:
         return asdict(self)
 
 
+def list_packages(project_root: Path) -> list[Package]:
+    return list_go_packages(project_root) + list_rpms(project_root)
+
+
 class _GoMod(TypedDict):
     Tool: list[_GoModTool]
     Require: list[_GoModModule]

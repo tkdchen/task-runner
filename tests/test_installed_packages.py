@@ -1,6 +1,6 @@
 import pytest
 
-from devtool.software_list import Package, list_go_packages, list_rpms
+from devtool.software_list import Package, list_packages
 from tests.constants import REPO_ROOT
 from tests.utils.container import Container
 
@@ -12,7 +12,7 @@ package_name_to_executable_name = {
     "gettext-envsubst": "envsubst",
 }
 
-expected_packages = list_go_packages(REPO_ROOT) + list_rpms(REPO_ROOT)
+expected_packages = list_packages(REPO_ROOT)
 packages_param = [pytest.param(package, id=package.name) for package in expected_packages]
 
 
