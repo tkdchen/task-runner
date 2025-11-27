@@ -25,8 +25,10 @@ def make_parser() -> argparse.ArgumentParser:
     subcommands = parser.add_subparsers(title="subcommands", required=True)
 
     ls_parser = subcommands.add_parser("ls", help="List software to be installed in the image")
-    ls_parser.add_argument("-f", "--format", choices=["txt", "json", "md"], default="txt")
-    ls_parser.add_argument("-o", "--output-file", type=Path)
+    ls_parser.add_argument(
+        "-o", "--output", dest="format", choices=["txt", "json", "md"], default="txt"
+    )
+    ls_parser.add_argument("--outfile", type=Path)
     ls_parser.set_defaults(__cmd__=list_software)
 
     gen_parser = subcommands.add_parser("gen", help="Generate a file for this repo")
@@ -37,13 +39,13 @@ def make_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def list_software(format: str, output_file: Path | None) -> None:
+def list_software(format: str, outfile: Path | None) -> None:
     packages = list_packages(REPO_ROOT)
     packages.sort(key=lambda p: p.name)
 
-    if output_file:
-        with output_file.open("w") as outfile:
-            _print_packages(format, packages, outfile)
+    if outfile:
+        with outfile.open("w") as f:
+            _print_packages(format, packages, f)
     else:
         _print_packages(format, packages, sys.stdout)
 
