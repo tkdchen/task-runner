@@ -52,15 +52,15 @@ class _GoModModule(TypedDict):
     Version: str
 
 
-def list_go_tools(project_root: Path) -> list[Package]:
-    packages: list[Package] = []
+def list_go_tools(project_root: Path) -> list[GoPackage]:
+    packages: list[GoPackage] = []
     for path in sorted(project_root.joinpath("deps/go-tools").iterdir()):
         if path.is_dir():
             packages.extend(_list_go_tools(path))
     return packages
 
 
-def _list_go_tools(tool_dir: Path) -> Iterable[Package]:
+def _list_go_tools(tool_dir: Path) -> Iterable[GoPackage]:
     proc = subprocess.run(
         ["go", "mod", "edit", "-json"],
         stdout=subprocess.PIPE,
@@ -117,13 +117,13 @@ class _RpmsLockPackage(TypedDict):
     evr: str
 
 
-def list_rpms(project_root: Path) -> list[Package]:
+def list_rpms(project_root: Path) -> list[RPMPackage]:
     rpms_dir = project_root / "deps" / "rpm"
 
     rpms_in: _RpmsIn = yaml.safe_load((rpms_dir / "rpms.in.yaml").read_text())
     rpms_lock: _RpmsLock = yaml.safe_load((rpms_dir / "rpms.lock.yaml").read_text())
 
-    packages: list[Package] = []
+    packages: list[RPMPackage] = []
     package_names = (
         rpms_in.get("packages", [])
         + rpms_in.get("reinstallPackages", [])
