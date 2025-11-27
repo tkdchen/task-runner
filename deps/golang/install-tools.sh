@@ -21,3 +21,6 @@ go install -ldflags "$COMMON_LDFLAGS" github.com/mikefarah/yq/v4
 
 tkn_version=$(get_version github.com/tektoncd/cli)
 go install -ldflags "$COMMON_LDFLAGS -X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=$tkn_version" github.com/tektoncd/cli/cmd/tkn
+
+cosign_version=$(get_version github.com/sigstore/cosign)
+go install -ldflags "$COMMON_LDFLAGS -X sigs.k8s.io/release-utils/version.gitVersion=$cosign_version" github.com/sigstore/cosign/cmd/cosign

@@ -15,6 +15,7 @@ package_name_to_executable_name = {
 # overrides for tools that don't support a simple --version flag
 version_arg_overrides = {
     "tkn": ["version", "--component", "client"],
+    "cosign": ["version"],
 }
 
 expected_packages = list_packages(REPO_ROOT)
