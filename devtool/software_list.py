@@ -114,20 +114,24 @@ def list_go_submodules(project_root: Path) -> list[GoPackage]:
             check=True,
             cwd=path,
         )
-        tags = proc.stdout.splitlines()
+        tags = proc.stdout.strip()
 
         if not tags:
             raise ValueError(
-                f"The HEAD of the submodule at {path} doesn't have a tag! Please checkout to a semver tag."
+                f"The HEAD of the submodule at {path} doesn't have a tag! "
+                "Please checkout to a semver tag."
             )
-        if len(tags) > 1:
+        version_match = re.search(r"\d+\.\d+\.\d", tags)
+        if not version_match:
             raise ValueError(
-                f"The HEAD of the submodule at {path} has multiple tags: {tags}. Aborting."
+                f"None of the tags for the submodule at {path} match semver. "
+                f"Tags: {tags.replace('\n', ' ')}"
             )
 
-        version = tags[0].removeprefix("v")
         module_path = f"./{path.relative_to(project_root).as_posix()}"
-        packages.append(GoPackage(name=name, module_path=module_path, version=version))
+        packages.append(
+            GoPackage(name=name, module_path=module_path, version=version_match.group())
+        )
 
     return packages
 

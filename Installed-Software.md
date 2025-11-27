@@ -16,6 +16,7 @@
 | kubectl                        | 1.34.2                         | `go install`                   |
 | make                           | 4.4.1-9.el10                   | RPM                            |
 | microdnf                       | 3.10.1-1.el10                  | RPM                            |
+| oc                             | 4.20.0                         | `go install`                   |
 | openssl                        | 3.5.1-4.el10_1                 | RPM                            |
 | oras                           | 1.3.0                          | `go install`                   |
 | python3                        | 3.12.11-3.el10                 | RPM                            |

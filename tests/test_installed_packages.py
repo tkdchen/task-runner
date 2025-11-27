@@ -18,6 +18,7 @@ version_arg_overrides = {
     "cosign": ["version"],
     "oras": ["version"],
     "kubectl": ["version", "--client"],
+    "oc": ["version", "--client"],
 }
 
 expected_packages = list_packages(REPO_ROOT)
