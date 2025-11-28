@@ -4,8 +4,9 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import IO, assert_never
+from typing import IO
 
+from devtool.markdown import print_packages_table
 from devtool.renovate import renovate_json
 from devtool.software_list import Package, list_go_tools, list_packages
 
@@ -81,41 +82,9 @@ def _print_packages(format: str, packages: list[Package], outfile: IO[str]) -> N
             print(json.dumps([p.asdict() for p in packages], indent=2), file=outfile)
         case "md":
             print("# Installed Software", end="\n\n", file=outfile)
-            _print_markdown_table(packages, outfile)
+            print_packages_table(packages, outfile)
         case _:
             raise RuntimeError(f"Invalid format passed from CLI: {format}")
-
-
-def _install_method(package: Package) -> str:
-    match package.type:
-        case "go-tool":
-            return "`go install`"
-        case "go-submodule":
-            return "Go submodule"
-        case "rpm":
-            return "RPM"
-        case _:
-            assert_never(package.type)
-
-
-def _print_markdown_table(packages: list[Package], outfile: IO[str]) -> None:
-    columns: list[list[str]] = []
-    columns.append(["Name", *(p.name for p in packages)])
-    columns.append(["Version", *(p.version for p in packages)])
-    columns.append(["Install Method", *map(_install_method, packages)])
-    # Hardcoded to generate smaller diffs. Increase if any package name is longer than this.
-    column_width = 30
-
-    for column in columns:
-        column.insert(1, "-" * column_width)
-
-    transposed: list[tuple[str, ...]] = list(zip(*columns))
-    for row in transposed:
-        for value in row:
-            outfile.write("| ")
-            outfile.write(value.ljust(column_width))
-            outfile.write(" ")
-        outfile.write("|\n")
 
 
 if __name__ == "__main__":
