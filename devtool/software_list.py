@@ -15,7 +15,7 @@ class GoPackage:
     name: str
     module_path: str
     version: str
-    installed_with: Literal["go"] = "go"
+    type: Literal["go-tool", "go-submodule"]
 
     def asdict(self) -> dict[str, Any]:
         return asdict(self)
@@ -25,7 +25,7 @@ class GoPackage:
 class RPMPackage:
     name: str
     version: str
-    installed_with: Literal["rpm"] = "rpm"
+    type: Literal["rpm"] = "rpm"
 
     def asdict(self) -> dict[str, Any]:
         return asdict(self)
@@ -92,6 +92,7 @@ def _list_go_tools(tool_dir: Path) -> Iterable[GoPackage]:
             name=name,
             module_path=module["Path"],
             version=module["Version"].removeprefix("v"),
+            type="go-tool",
         )
 
 
@@ -130,7 +131,12 @@ def list_go_submodules(project_root: Path) -> list[GoPackage]:
 
         module_path = f"./{path.relative_to(project_root).as_posix()}"
         packages.append(
-            GoPackage(name=name, module_path=module_path, version=version_match.group())
+            GoPackage(
+                name=name,
+                module_path=module_path,
+                version=version_match.group(),
+                type="go-submodule",
+            )
         )
 
     return packages
