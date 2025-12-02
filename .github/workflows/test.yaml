@@ -1,0 +1,40 @@
+name: Test
+
+"on":
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          submodules: true
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+
+      - name: Create virtual environment
+        run: |
+          make .venv
+
+      - name: Fetch submodule tags and list expected software versions
+        run: |
+          # Fetches tags efficiently as a side effect
+          .venv/bin/devtool ls
+
+      - name: Build runner image
+        uses: redhat-actions/buildah-build@v2.13
+        with:
+          tags: localhost/task-runner:latest
+          containerfiles: ./Containerfile
+
+      - name: Run tests
+        env:
+          TEST_IMAGE: localhost/task-runner:latest
+        run: |
+          .venv/bin/pytest --color=yes
