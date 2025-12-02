@@ -170,6 +170,12 @@ spec:
       workspace: git-auth
     - name: netrc
       workspace: netrc
+  - name: get-build-params
+    taskRef:
+      name: get-build-params
+    params:
+    - name: SOURCE_ARTIFACT
+      value: $(tasks.clone-repository.results.SOURCE_ARTIFACT)
   - matrix:
       params:
       - name: PLATFORM
@@ -208,6 +214,12 @@ spec:
       value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
     - name: IMAGE_APPEND_PLATFORM
       value: "true"
+    - name: ANNOTATIONS
+      value:
+      - $(tasks.get-build-params.results.annotations[*])
+    - name: LABELS
+      value:
+      - $(tasks.get-build-params.results.labels[*])
     runAfter:
     - prefetch-dependencies
     taskRef:
