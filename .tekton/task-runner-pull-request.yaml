@@ -13,6 +13,9 @@ metadata:
       && (
         "deps/**".pathChanged()
         || "Containerfile".pathChanged()
+        || ".tekton/tasks/**".pathChanged()
+        || ".tekton/build-pipeline.yaml".pathChanged()
+        || ".tekton/task-runner-pull-request.yaml".pathChanged()
       )
   creationTimestamp: null
   labels:
