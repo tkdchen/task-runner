@@ -6,7 +6,7 @@ from devtool.software_list import GoPackage
 def renovate_json(go_packages: list[GoPackage]) -> dict[str, Any]:
     return {
         "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-        "extends": ["config:recommended"],
+        "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
         "schedule": ["* * * * *"],
         "prHourlyLimit": 0,  # unlimited
         "git-submodules": {
