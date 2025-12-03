@@ -170,9 +170,13 @@ devtool gen --all  # Generate files (e.g. Installed-Software.md)
 
 ### Building the Image
 
+Locally:
+
 ```sh
 podman build -t task-runner .
 ```
+
+For production: we use Konflux CI. See the pipelines in `.tekton/`.
 
 ### Testing
 
@@ -218,6 +222,11 @@ This uses [rpm-lockfile-prototype] to resolve and lock package versions.
 ### Versioning
 
 The version of the runner image is tracked in the VERSION file.
+
+The Konflux build pipeline automatically sets the `org.opencontainer.image.version`
+annotation (and label as well) on the built image using our custom
+`.tekton/tasks/get-build-params.yaml` Task.
+
 When making a new release, bump the version according to the first matching rule:
 
 - Removed a tool / updated the major version of any tool -> bump the **major** version
