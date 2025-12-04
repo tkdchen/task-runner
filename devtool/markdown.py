@@ -10,7 +10,7 @@ def print_packages_table(packages: list[Package], outfile: IO[str]) -> None:
             case "go-tool":
                 return "`go install`"
             case "go-submodule":
-                return "Go submodule"
+                return "Git submodule (Go)"
             case "rpm":
                 return "RPM"
             case _:

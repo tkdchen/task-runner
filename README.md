@@ -64,7 +64,7 @@ installs the exact package versions specified.
 #### Go Tools
 
 If the tool is installable via `go install`, prefer this approach. Compared to
-the [submodule approach](#go-submodules), this results in more accurate SBOMs.
+the [submodule approach](#git-submodules-go), this results in more accurate SBOMs.
 
 Each tool has its own directory with `go.mod`/`go.sum`, which is crucial for independent
 version management. Go's [MVS](https://go.dev/ref/mod#minimal-version-selection)
@@ -106,7 +106,7 @@ Process:
    devtool gen --all
    ```
 
-#### Go Submodules
+#### Git Submodules (Go)
 
 If the tool is not installable with `go install`, e.g. due to the use of `replace`
 directives in the tool's `go.mod` or due to incorrectly formatted semver tags,
