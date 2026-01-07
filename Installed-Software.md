@@ -8,6 +8,7 @@ Re-generate with:
 
 | Name                           | Version                        | Install Method                           |
 | ------------------------------ | ------------------------------ | ---------------------------------------- |
+| awscli                         | 1.44.12                        | `pip install`                            |
 | bash                           | 5.2.26-6.el10                  | RPM                                      |
 | bc                             | 1.07.1-23.el10                 | RPM                                      |
 | conftest                       | 0.65.0                         | `go install`                             |
@@ -27,13 +28,14 @@ Re-generate with:
 | openssl                        | 3.5.1-4.el10_1                 | RPM                                      |
 | oras                           | 1.3.0                          | `go install`                             |
 | python3                        | 3.12.12-1.el10_1               | RPM                                      |
+| python3-pip                    | 23.3.2-7.el10                  | RPM                                      |
 | retry                          | 1.0.0                          | [local](./local-tools/retry)             |
 | rpm                            | 4.19.1.1-20.el10               | RPM                                      |
 | sed                            | 4.9-3.el10                     | RPM                                      |
 | select-oci-auth                | 1.0.0                          | [local](./local-tools/select-oci-auth)   |
 | skopeo                         | 1.20.0-2.el10_1                | RPM                                      |
 | syft                           | 1.39.0                         | `go install`                             |
-| tar                            | 1.35-7.el10                    | RPM                                      |
+| tar                            | 1.35-9.el10_1                  | RPM                                      |
 | tkn                            | 0.43.0                         | `go install`                             |
 | yq                             | 4.50.1                         | `go install`                             |
 | zip                            | 3.0-45.el10                    | RPM                                      |

@@ -42,7 +42,17 @@ class LocalPackage:
         return asdict(self)
 
 
-type Package = GoPackage | RPMPackage | LocalPackage
+@dataclass(frozen=True)
+class PipPackage:
+    name: str
+    version: str
+    type: Literal["pip"] = "pip"
+
+    def asdict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+type Package = GoPackage | RPMPackage | LocalPackage | PipPackage
 
 
 def list_packages(project_root: Path) -> list[Package]:
@@ -50,6 +60,7 @@ def list_packages(project_root: Path) -> list[Package]:
         list_go_tools(project_root)
         + list_go_submodules(project_root)
         + list_rpms(project_root)
+        + list_pip_packages(project_root)
         + list_local_tools(project_root)
     )
 
@@ -219,6 +230,11 @@ class _RpmsLockPackage(TypedDict):
     evr: str
 
 
+# RPMs that are installed only for building (e.g. compiling C extensions)
+# and removed afterwards. These should not appear in Installed-Software.md.
+_BUILD_ONLY_RPMS = {"gcc", "python3-devel"}
+
+
 def list_rpms(project_root: Path) -> list[RPMPackage]:
     rpms_dir = project_root / "deps" / "rpm"
 
@@ -233,6 +249,8 @@ def list_rpms(project_root: Path) -> list[RPMPackage]:
     )
 
     for package_name in package_names:
+        if package_name in _BUILD_ONLY_RPMS:
+            continue
         evrs: dict[str, str | None] = {}
         for arch in rpms_lock["arches"]:
             try:
@@ -290,3 +308,64 @@ def list_local_tools(project_root: Path) -> list[LocalPackage]:
         )
 
     return local_tools
+
+
+def list_pip_packages(project_root: Path) -> list[PipPackage]:
+    """List pip packages by reading names from requirements.in and versions from requirements.txt.
+
+    Similar to how RPMs are handled with rpms.in.yaml (package names) and rpms.lock.yaml (versions).
+    """
+    pip_dir = project_root / "deps" / "pip"
+    requirements_in = pip_dir / "requirements.in"
+    requirements_txt = pip_dir / "requirements.txt"
+
+    if not requirements_in.exists():
+        return []
+
+    # Parse package names from requirements.in (direct dependencies)
+    package_names: list[str] = []
+    for line in requirements_in.read_text().splitlines():
+        line = line.strip()
+        # Skip empty lines and comments
+        if not line or line.startswith("#"):
+            continue
+        # Strip inline comments
+        if " #" in line:
+            line = line.split(" #")[0].strip()
+        # Package names can have version specifiers, but we only want the name
+        # Handle cases like "awscli" or "awscli>=1.0"
+        package_name = re.split(r"[<>=!]", line)[0].strip()
+        if package_name:
+            package_names.append(package_name.lower())
+
+    if not package_names:
+        return []
+
+    # Parse resolved versions from requirements.txt
+    resolved_versions: dict[str, str] = {}
+    for line in requirements_txt.read_text().splitlines():
+        line = line.strip()
+        # Skip empty lines, comments, and indented lines (dependency annotations)
+        if not line or line.startswith("#") or line.startswith(" "):
+            continue
+        # Strip inline comments
+        if " #" in line:
+            line = line.split(" #")[0].strip()
+        # Parse package==version format
+        if "==" in line:
+            name, version = line.split("==", 1)
+            version = version.rstrip(" \\")
+            resolved_versions[name.strip().lower()] = version.strip()
+
+    # Match package names from requirements.in with versions from requirements.txt
+    pip_packages: list[PipPackage] = []
+    for package_name in package_names:
+        version = resolved_versions.get(package_name)
+        if version is None:
+            raise ValueError(
+                f"Package {package_name!r} from requirements.in not found in requirements.txt. "
+                "Please regenerate requirements.txt with: uv pip compile --generate-hashes requirements.in -o requirements.txt"
+            )
+        pip_packages.append(PipPackage(name=package_name, version=version))
+
+    return pip_packages

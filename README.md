@@ -142,6 +142,34 @@ Process:
    devtool gen --all
    ```
 
+#### Pip Packages
+
+Pip packages use a lockfile-based approach similar to [RPM packages](#rpm-packages).
+Direct dependencies go in `requirements.in`, and resolved transitive dependencies
+go in `requirements.txt`. Konflux's [Hermeto] can pre-fetch pip packages from
+`requirements.txt` for hermetic builds.
+
+Process:
+
+1. Add the package name to `deps/pip/requirements.in`:
+
+   ```
+   awscli
+   ```
+
+2. Regenerate `requirements.txt` with all transitive dependencies:
+
+   ```sh
+   cd deps/pip
+   uv pip compile --generate-hashes requirements.in -o requirements.txt
+   ```
+
+3. Regenerate auto-generated files:
+
+   ```sh
+   devtool gen --all
+   ```
+
 #### Local Tools
 
 Konflux Tasks have come to depend on two crucial scripts:
@@ -314,4 +342,5 @@ the changelog content yourself.
 [konflux-hermetic]: https://konflux-ci.dev/docs/building/hermetic-builds/
 [rpm-lockfile]: https://hermetoproject.github.io/hermeto/rpm/
 [rpm-lockfile-prototype]: https://github.com/konflux-ci/rpm-lockfile-prototype
+[Hermeto]: https://github.com/hermetoproject/hermeto
 [containers-auth.json]: https://man.archlinux.org/man/containers-auth.json.5
