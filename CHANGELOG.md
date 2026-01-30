@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-*Nothing yet.*
+- Set `WORKDIR` to `/home/taskuser`.
 
 ## 1.2.0
 

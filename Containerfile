@@ -61,3 +61,5 @@ USER 1000
 ENV HOME=/home/taskuser
 
 ENV BUILDAH_ISOLATION=chroot
+
+WORKDIR /home/taskuser
